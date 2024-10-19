@@ -1,11 +1,31 @@
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+  } from "@/components/ui/carousel"
+
+import Navbar from "./pages/Navbar"
+import LandingPage from "./pages/LandingPage"
+import Articles from "./pages/Articles"
 import { RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import { router } from "./Router";
+import { router } from "./Router";  
 
 export default function App() {
     return (
-        <ThemeProvider>
-            <RouterProvider router={router} />
-        </ThemeProvider>
+        <>
+
+        <RouterProvider router={router} />
+        
+       
+
+
+
+
+        
+        </>
+      
+
     )
 }

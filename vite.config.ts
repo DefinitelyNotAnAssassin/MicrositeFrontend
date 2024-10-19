@@ -2,13 +2,13 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
-const basenameProd = '/react-shadcn-starter'
+const basenameProd = "/react-shadcn-starter"
 
 export default defineConfig(({ command }) => {
-  const isProd = command === 'build'
+  const isProd = command === "build"
 
   return {
-    base: isProd ? basenameProd : '',
+    base: "https://programmicrosite.vercel.app/",
     plugins: [react()],
     resolve: {
       alias: {
@@ -17,7 +17,7 @@ export default defineConfig(({ command }) => {
     },
     define: {
       global: {
-        basename: isProd ? basenameProd : '',
+        basename: isProd ? basenameProd : "",
       },
     },
   }
