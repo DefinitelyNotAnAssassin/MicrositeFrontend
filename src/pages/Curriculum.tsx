@@ -403,7 +403,7 @@ export default function CurriculumForm() {
   const [expandedYears, setExpandedYears] = useState<string[]>([])
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/API/students")
+    fetch("https://sdcamicrosite.pythonanywhere.com/API/students")
       .then((res) => res.json())
       .then(setStudents)
       .catch((error) => console.error("Error fetching data:", error))
@@ -460,7 +460,7 @@ export default function CurriculumForm() {
 
   const handleSubmit = () => {
     console.log(courseStatus)
-    const url = "http://127.0.0.1:8000/API/setCurriculumStatus"
+    const url = "https://sdcamicrosite.pythonanywhere.com/API/setCurriculumStatus"
     fetch (url, {
       method: 'POST',
       headers: {
@@ -480,7 +480,7 @@ export default function CurriculumForm() {
         setCourseStatus(generateDefaultCourseStatus(curriculum))
         alert('Successfully submitted curriculum form.')
         // get the updated list of students 
-        fetch("http://127.0.0.1:8000/API/students")
+        fetch("https://sdcamicrosite.pythonanywhere.com/API/students")
         .then((res) => res.json())
         .then((students) =>{
           setStudents(students)

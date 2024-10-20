@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Navbar from './Navbar'
 
 export default function StudentLogin() {
   const [studentNumber, setStudentNumber] = useState('')
@@ -35,7 +36,9 @@ export default function StudentLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className = "min-h-screen flex flex-col">
+    <Navbar />
+    <div className="flex flex-1 items-center justify-center bg-gray-100">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,6 +61,7 @@ export default function StudentLogin() {
                       value={studentNumber}
                       onChange={(e) => setStudentNumber(e.target.value)}
                       disabled={isLoading}
+                      autoComplete='off'
                     />
                     <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   </div>
@@ -94,5 +98,7 @@ export default function StudentLogin() {
         </Card>
       </motion.div>
     </div>
+    </div>
+    
   )
 }

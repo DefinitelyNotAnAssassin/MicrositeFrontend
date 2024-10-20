@@ -416,9 +416,10 @@ export default function StudentDashboard() {
             window.location.href = '/student_portal'
         }
 
-        const response = await fetch(`http://127.0.0.1:8000/API/students/${studentNumber}`)
+        const response = await fetch(`https://sdcamicrosite.pythonanywhere.com/API/students/${studentNumber}`)
         if (!response.ok) {
-          throw new Error('Failed to fetch student data')
+          throw new Error('No student data found, check your student number and try again')
+
         }
 
         const data = await response.json()

@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import StudentLogin from "./pages/StudentPortal";
 import StudentDashboard from "./pages/StudentDashboard";
 import ContactForm from "./pages/Contact";
+import MissionPage from "./pages/Mission";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
         path: "/curriculum",
         element: <CurriculumForm />,
        
+    },
+    {
+        path: "/mission",    
+        element: <MissionPage />,
     },
     {
         path: "/student_portal",    
