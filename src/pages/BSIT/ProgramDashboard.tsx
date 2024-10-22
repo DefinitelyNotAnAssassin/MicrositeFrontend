@@ -10,6 +10,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import Navbar from './Navbar'
 import { getJwt } from '@/utils/Cookies'
 import { BASE_URL } from '@/constants/UrlConstants'
+import NavbarProgramChair from './NavbarProgramChair'
 
 type ProgramStats = {
   enrolled: number
@@ -56,7 +57,7 @@ export default function ProgramDashboard() {
         const [programResponse, yearlyResponse, accountResponse] = await Promise.all([
           fetch(`${BASE_URL}/API/getProgramData?program=BSIT`),
           fetch(`${BASE_URL}/API/getYearlyPerformance?program=BSIT`),
-          fetch(`http://127.0.0.1:8000/API/verifyAuth`, { 
+          fetch(`${BASE_URL}/API/verifyAuth`, { 
            
 
             headers: {
@@ -92,8 +93,8 @@ export default function ProgramDashboard() {
        
         setLoading(false)
       } catch (err) {
-        setError('An error occurred while fetching data')
         setLoading(false)
+        window.location.href = "/program_chair_login"
       }
     }
 

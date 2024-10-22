@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const links = [
   { name: 'Home', href: '/' },
@@ -10,10 +8,30 @@ const links = [
   { name: 'Articles', href: '/articles' },
   { name: 'Student Portal', href: '/student_portal' },
   { name: 'Contact', href: '/contact' },
-]
+];
+
+const programChairLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Curriculum', href: '/curriculum' },
+  { name: 'Program Dashboard', href: '/program_dashboard' },
+
+];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    // Fetch user role from local storage or backend
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.role) {
+      setUserRole(user.role);
+    }
+  }, []);
+
+
+
+
 
   return (
     <nav className="w-full sticky top-0 bg-white z-50 shadow-md">
@@ -31,7 +49,7 @@ export default function Navbar() {
             />
           </motion.div>
           <div className="hidden md:flex space-x-4">
-            {links.map((link) => (
+            {(userRole == "Program Chair" ? programChairLinks : links).map((link) => (
               <motion.a
                 key={link.name}
                 href={link.href}
@@ -44,39 +62,28 @@ export default function Navbar() {
             ))}
           </div>
           <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
               onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
+              className="text-gray-700 hover:text-gray-900 focus:outline-none"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
+              {isOpen ? 'Close' : 'Menu'}
+            </button>
           </div>
         </div>
+        {isOpen && (
+          <div className="md:hidden">
+            {(userRole === 'program_chair' ? programChairLinks : links).map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="block text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
-      <motion.div
-        className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}
-        initial="closed"
-        animate={isOpen ? "open" : "closed"}
-        variants={{
-          open: { opacity: 1, height: 'auto' },
-          closed: { opacity: 0, height: 0 }
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {links.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-            >
-              {link.name}
-            </a>
-          ))}
-        </div>
-      </motion.div>
     </nav>
-  )
+  );
 }

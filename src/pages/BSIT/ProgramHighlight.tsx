@@ -72,7 +72,7 @@ export default function ProgramHighlight() {
                   </CardHeader>
                   <CardContent>
                     <img
-                      src={`http://127.0.0.1:8000/media/${highlight.image}`}
+                      src={`${BASE_URL}/media/${highlight.image}`}
                       alt={highlight.title}
                       className="w-full h-auto rounded-lg shadow-md"
                     />

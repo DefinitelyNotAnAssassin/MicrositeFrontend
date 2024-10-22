@@ -47,7 +47,17 @@ export default function ProgramChairLogin() {
     if (data.status === 'success') {
       console.log('Login successful:', data)
       localStorage.setItem('user', JSON.stringify(data))
-      window.location.href = '/program_dashboard'
+      // check if next argument is passed in the URL 
+      // if so, redirect to the next page 
+      // else redirect to the dashboard
+
+      const next = new URLSearchParams(window.location.search).get('next') 
+      if (next) {
+        window.location.href = next
+      }
+      else {
+        window.location.href = '/program_dashboard'
+      }
         
     } else {
       toast({

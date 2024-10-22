@@ -11,6 +11,7 @@ import {
   import { useState, useEffect } from "react"
 import { truncateText } from "@/utils/StringUtils"
 import { BASE_URL } from "@/constants/UrlConstants"
+import { Skeleton } from "@/components/ui/skeleton"
   
   type Article = {
     title: string
@@ -58,7 +59,13 @@ import { BASE_URL } from "@/constants/UrlConstants"
     }, [articles])
   
     if (isLoading) {
-      return <div className="text-center py-20">Loading...</div>
+      <div className="flex items-center space-x-4">
+      <Skeleton className="h-12 w-12 rounded-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
+    </div>
     }
   
     if (error) {
@@ -93,7 +100,7 @@ import { BASE_URL } from "@/constants/UrlConstants"
                 <CardContent>
                     {article.image && (
                     <img 
-                      src={`http://127.0.0.1:8000${article.image}`} 
+                      src={`${BASE_URL}/${article.image}`} 
                       alt={article.title} 
                       className="w-full h-48 object-cover mb-4 rounded-md"
                     />

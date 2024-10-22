@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Navbar from './Navbar'
 import { BASE_URL } from '@/constants/UrlConstants'
+import { getJwt } from '@/utils/Cookies'
+import NavbarProgramChair from './NavbarProgramChair'
 
 type Course = {
   code: string
@@ -51,6 +53,25 @@ export default function CurriculumForm() {
   const [curriculumData, setCurriculumData] = useState<CurriculumData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const accessToken = JSON.parse(getJwt())
+
+
+  useEffect(() => {
+  fetch(`${BASE_URL}/API/verifyAuth`, {
+
+  headers: {
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${accessToken.access}`
+    }
+   }
+
+  ).then((response) => {
+    if (!response.ok) {
+      window.location.href = '/program_chair_login?next=/curriculum'
+    }
+    return response.json()
+  })
+}, [])
 
   useEffect(() => {
     setIsLoading(true)

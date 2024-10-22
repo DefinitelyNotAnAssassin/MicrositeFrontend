@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/pagination"
 import Navbar from './Navbar'
 import { BASE_URL } from '@/constants/UrlConstants'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type Article = {
   title: string
@@ -87,9 +88,7 @@ export default function ArticlePage() {
     window.scrollTo(0, 0)
   }
 
-  if (isLoading) {
-    return <div className="text-center py-20">Loading...</div>
-  }
+ 
 
   if (error) {
     return <div className="text-center py-20 text-red-500">{error}</div>
@@ -147,7 +146,7 @@ export default function ArticlePage() {
                   <CardContent className="flex-grow">
                     {article.image && (
                       <img 
-                        src={`http://127.0.0.1:8000${article.image}`} 
+                        src={`${BASE_URL}/${article.image}`} 
                         alt={article.title} 
                         className="w-full h-48 object-cover mb-4 rounded-md"
                       />

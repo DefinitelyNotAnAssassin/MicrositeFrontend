@@ -43,7 +43,7 @@ export default function Activities(props){
 
     return( 
 
-        <section id="activities" className="py-20 bg-gray-50">
+        <section id="activities" className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.h2 
             className="text-4xl font-bold mb-12 text-center"
@@ -53,7 +53,7 @@ export default function Activities(props){
           >
             Student Activities
           </motion.h2>
-          <div className="flex flex-wrap gap-8 justify-center">
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
             {activities.map((activity, index) => (
               <motion.div
                 key={index}
@@ -61,9 +61,10 @@ export default function Activities(props){
                 custom={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
+                className="border"
               >
                 <Card className="h-full border-none shadow-lg">
-                  <CardHeader>  
+                  <CardHeader>
                     <CardTitle className="text-xl font-semibold text-[#cc0000]">{activity.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
