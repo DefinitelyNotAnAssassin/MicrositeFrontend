@@ -7,6 +7,7 @@ const links = [
   { name: 'Home', href: '/' },
   { name: 'Mission', href: '/mission' },
   { name: 'Resources', href: '/resources' },
+  { name: 'Articles', href: '/articles' },
   { name: 'Student Portal', href: '/student_portal' },
   { name: 'Contact', href: '/contact' },
 ]

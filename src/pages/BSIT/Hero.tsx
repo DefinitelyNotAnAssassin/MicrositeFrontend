@@ -3,7 +3,10 @@ import { Button } from '@/components/ui/button';
 import { ChevronRight, ArrowDown } from 'lucide-react';
 import { motion, useTransform } from 'framer-motion';
 import Autoplay from 'embla-carousel-autoplay';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+
+
 
 export default function Hero(props) {
   const carouselImages = [
@@ -11,6 +14,8 @@ export default function Hero(props) {
     'https://placehold.co/1600x900',
     'https://placehold.co/1600x900',
   ];
+
+
 
   const opacity = useTransform(props.scroll, [0, 0.5], [1, 0]);
   const scale = useTransform(props.scroll, [0, 0.5], [1, 0.8]);

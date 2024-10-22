@@ -6,50 +6,15 @@ import NoMatch from "./pages/NoMatch";
 import Dashboard from "./pages/Dashboard";
 import Empty from "./pages/Empty";
 import Sample from "./pages/Sample";
-import ResourcesPage from "./pages/Resources";
-import CurriculumForm from "./pages/Curriculum";
-import LandingPage from "./pages/LandingPage";
-import StudentLogin from "./pages/StudentPortal";
-import StudentDashboard from "./pages/StudentDashboard";
-import ContactForm from "./pages/Contact";
-import MissionPage from "./pages/Mission";
+import ResourcesPage from "./pages/BSIT/Resources";
+import CurriculumForm from "./pages/BSIT/Curriculum";
+import LandingPage from "./pages/BSIT/LandingPage";
+import StudentLogin from "./pages/BSIT/StudentPortal";
+import StudentDashboard from "./pages/BSIT/StudentDashboard";
+import ContactForm from "./pages/BSIT/Contact";
+import MissionPage from "./pages/BSIT/Mission";
+import { BSITRouter } from "./pages/BSIT/BSITRouter";
 
-export const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <LandingPage />,
-       
-    },
-
-    {
-        path: "/resources",
-        element: <ResourcesPage />,
-       
-    },
-    {
-        path: "/curriculum",
-        element: <CurriculumForm />,
-       
-    },
-    {
-        path: "/mission",    
-        element: <MissionPage />,
-    },
-    {
-        path: "/student_portal",    
-        element: <StudentLogin />,
-    },
-    {
-        path: "/student_dashboard",    
-        element: <StudentDashboard />,
-    },
-    {
-        path: "/contact",    
-        element: <ContactForm />,
-    },
-
-    {
-        path: "*",
-        element: <NoMatch />,
-    },
-]);
+export const router = createBrowserRouter(
+    BSITRouter
+);

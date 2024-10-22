@@ -6,9 +6,9 @@ import {
     CarouselPrevious,
   } from "@/components/ui/carousel"
 
-import Navbar from "./pages/Navbar"
-import LandingPage from "./pages/LandingPage"
-import Articles from "./pages/Articles"
+import Navbar from "./pages/BSIT/Navbar"
+import LandingPage from "./pages/BSIT/LandingPage"
+import Articles from "./pages/BSIT/Articles"
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Router";  
 
