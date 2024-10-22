@@ -12,8 +12,10 @@ import {
 import { truncateText } from "@/utils/StringUtils"
 import { BASE_URL } from "@/constants/UrlConstants"
 import { Skeleton } from "@/components/ui/skeleton"
+import Link from "@/components/ui/link"
   
   type Article = {
+    id: number
     title: string
     content: string
     image: string
@@ -111,7 +113,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
-                  <Button variant="outline">Read More</Button>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href={`/view_article?id=${article.id}`}>Read More</Link>
+                    </Button>
                   <span className="text-sm text-gray-500">{new Date(article.date).toLocaleDateString()}</span>
                 </CardFooter>
               </Card>

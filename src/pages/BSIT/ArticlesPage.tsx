@@ -22,8 +22,10 @@ import {
 import Navbar from './Navbar'
 import { BASE_URL } from '@/constants/UrlConstants'
 import { Skeleton } from '@/components/ui/skeleton'
+import Link from '@/components/ui/link'
 
 type Article = {
+  id: number
   title: string
   content: string
   image: string
@@ -154,7 +156,9 @@ export default function ArticlePage() {
                     <p className="text-gray-600 line-clamp-3">{article.content}</p>
                   </CardContent>
                   <CardFooter className="flex justify-between items-center mt-auto">
-                    <Button variant="outline">Read More</Button>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href={`/view_article?id=${article.id}`}>Read More</Link>
+                    </Button>
                     <div className="flex flex-col items-end">
                       <span className="text-sm text-gray-500">{new Date(article.date).toLocaleDateString()}</span>
                       <span className="text-xs text-gray-400">{article.category}</span>

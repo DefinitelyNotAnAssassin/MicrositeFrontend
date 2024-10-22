@@ -12,6 +12,7 @@ const links = [
 
 const programChairLinks = [
   { name: 'Home', href: '/' },
+  { name: 'Articles', href: '/articles' },
   { name: 'Curriculum', href: '/curriculum' },
   { name: 'Program Dashboard', href: '/program_dashboard' },
 

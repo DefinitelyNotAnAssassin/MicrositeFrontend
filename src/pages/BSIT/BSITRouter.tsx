@@ -10,6 +10,7 @@ import NoMatch from '../NoMatch';
 import ProgramDashboard from './ProgramDashboard';
 import ProgramChairLogin from './ProgramChairPortal';
 import ArticlesPage from './ArticlesPage';
+import ViewArticle from './ViewArticle';
 import path from 'path';
 
 
@@ -60,6 +61,10 @@ export const BSITRouter = [{
     element: <ContactForm />,
 },
 
+{
+    path: "/view_article",
+    element: <ViewArticle />,
+},
 {
     path: "*",
     element: <NoMatch />,

@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import { truncateText } from '@/utils/StringUtils';
 import { BASE_URL } from '@/constants/UrlConstants';
+import Link from '@/components/ui/link';
 
 type Activity = { 
+    id: number
     title: string
     image: string
     content: string 
     author: string
 }
+
 
 
 export default function Activities(props){ 
@@ -53,7 +56,7 @@ export default function Activities(props){
           >
             Student Activities
           </motion.h2>
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <div className="flex flex-wrap justify-center gap-8">
             {activities.map((activity, index) => (
               <motion.div
                 key={index}
@@ -61,7 +64,7 @@ export default function Activities(props){
                 custom={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
-                className="border"
+                className="max-w-md"
               >
                 <Card className="h-full border-none shadow-lg">
                   <CardHeader>
@@ -76,7 +79,9 @@ export default function Activities(props){
                     <p className="text-gray-600">{truncateText(activity.content, 64)}</p>
                   </CardContent>
                   <CardFooter>
-                    <Button variant="outline" className="w-full">Learn More</Button>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href={`/view_article?id=${activity.id}`}>Read More</Link>
+                    </Button>
                   </CardFooter>
                 </Card>
               </motion.div>
