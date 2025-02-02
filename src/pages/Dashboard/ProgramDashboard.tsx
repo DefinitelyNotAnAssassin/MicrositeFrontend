@@ -16,12 +16,13 @@ import { ProgramContext } from '@/contexts/ProgramContext'
 
 
 type ProgramStats = {
-  enrolled: number
-  graduated: number
-  failed: number
-  incomplete: number
-  number_of_students: number
-  total_students: number  
+  [program: string]: {
+    enrolled: number
+    graduated: number
+    failed: number
+    incomplete: number
+    number_of_students: number
+  }
 }
 
 type YearlyData = {
@@ -45,7 +46,7 @@ type Account = {
 }
 
 export default function ProgramDashboard() {
-  const [programStats, setProgramStats] = useState<ProgramStats | null>(null)
+  const [programStats, setProgramStats] = useState<ProgramStats[string] | null>(null)
   const [yearlyData, setYearlyData] = useState<YearlyData[]>([])
   const [selectedYear, setSelectedYear] = useState<string>('')
   const [loading, setLoading] = useState(true)
@@ -64,11 +65,16 @@ export default function ProgramDashboard() {
         ])
 
         const programData = programResponse.data
+        // Get the first program's stats since we're viewing a specific program
+        const firstProgramStats = Object.values(programData)[0] as ProgramStats[string]
+        setProgramStats(firstProgramStats)
+        
         const yearlyData = yearlyResponse.data
 
-        setProgramStats(programData)
         setYearlyData(yearlyData)
-        setSelectedYear(yearlyData[yearlyData.length - 1].year)
+        if (yearlyData.length > 0) {
+          setSelectedYear(yearlyData[yearlyData.length - 1].year)
+        }
 
         const user = JSON.parse(localStorage.getItem('user') || '{}')
         setAccount(user.account)
@@ -76,6 +82,7 @@ export default function ProgramDashboard() {
         setLoading(false)
       } catch (err) {
         setLoading(false)
+        alert(err)
         window.location.href = "/program_chair_login"
       }
     }
@@ -146,7 +153,7 @@ export default function ProgramDashboard() {
               <CardTitle>Total Students</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-4xl font-bold">{programStats.total_students}</p>
+              <p className="text-4xl font-bold">{programStats.number_of_students}</p>
             </CardContent>
           </Card>
           <Card>

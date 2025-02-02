@@ -11,13 +11,12 @@ import Navbar from  './Navbar'
 import ArticleForm from './ArticleForm'
 import { getJwt } from '@/utils/Cookies'
 import { BASE_URL } from '@/constants/UrlConstants'
-
+import axios from '@/utils/AuthAxios';
+import { useAuth } from '@/contexts/AuthContext'
 
 const CATEGORY_CHOICES = ['Events', 'Announcements', 'Student Activities', 'General']
 const DEPARTMENT_CHOICES = ['SCMCS', 'SNAHS', 'SMLS', 'SITHM', 'SASE']
-const PROGRAM_CHOICES = [
-  'ABCOM', 'ABMMA', 'AHM', 'BACOMM', 'BARNCII', 'BEED', 'BMMA', 'BPP NCII', 'BSA', 'BSAIS', 'BSAT', 'BSB', 'BSBA', 'BSC', 'BSCS', 'BSE', 'BSED', 'BSHM', 'BSHRM', 'BSIT', 'BSIT(TEST)', 'BSMLS', 'BSMT', 'BSN', 'BSN (YIBU)', 'BSNED', 'BSOT', 'BSP', 'BSPSY', 'BSPT', 'BSPT (YIBU)', 'BSRT', 'BSRT (YIBU)', 'BSTM', 'BSTRM', 'CCNCII', 'CCPIII-TAFE', 'CGNCII', 'CGNCII (T)', 'CHSNCII', 'CTP', 'DB', 'DBM-KENT', 'DM', 'DMM-KENT', 'EIMNCII', 'FBSNCII', 'FL', 'HSKNCII', 'MAP', 'MAP (YIBU)', 'MBA', 'MBA (YIBU)', 'MD', 'MD(TEST)', 'MISICT', 'MSN', 'PNCIV', 'PRE-DENT', 'SMAWNCI', 'SMAWNCII', 'VACOMLIT', 'WSA'
-]
+const PROGRAM_CHOICES = ['BSIT', 'BMMA', 'BACOMM']
 
 interface Article {
   id: number
@@ -31,7 +30,14 @@ interface Article {
   program: string
 }
 
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+}
+
 export default function ManageArticles() {
+  const { program, department } = useAuth();
   const [articles, setArticles] = useState<Article[]>([])
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
   const [filters, setFilters] = useState({ title: '', category: 'all', department: 'all', program: 'all' })
@@ -39,20 +45,19 @@ export default function ManageArticles() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    const access = getJwt(); 
-    const header = { 
-      headers: { 
-        Authorization: `Bearer ${access}`
-      }
-    }
-    fetch(`${BASE_URL}/API/getProgramArticles`, header).then(response => response.json()).then(data => {
-      console.log(data)
-      setArticles(data)
-    })
-
-  }, [])
+    const fetchData = async () => {
+      const [articlesRes, usersRes] = await Promise.all([
+        axios.get(`${BASE_URL}/API/getProgramArticles`),
+        axios.get(`${BASE_URL}/API/getProgramUsers`)
+      ]);
+      setArticles(articlesRes.data);
+      setUsers(usersRes.data);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const filtered = articles.filter(article => 
@@ -68,36 +73,43 @@ export default function ManageArticles() {
     setFilters(prev => ({ ...prev, [key]: value }))
   }
 
-  const handleAdd = async (newArticle: Omit<Article, 'id' | 'date'>) => {
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    const date = new Date().toISOString().split('T')[0]
-    const id = Math.max(...articles.map(a => a.id)) + 1
-    const addedArticle = { ...newArticle, id, date }
-    setArticles(prev => [...prev, addedArticle])
-    setIsLoading(false)
-    setIsAddModalOpen(false)
-  }
+  const handleAdd = async (newArticle: FormData) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${BASE_URL}/API/articles`, newArticle);
+      setArticles(prev => [...prev, response.data]);
+      setIsAddModalOpen(false);
+    } catch (error) {
+      console.error('Error adding article:', error);
+    }
+    setIsLoading(false);
+  };
 
-  const handleEdit = async (editedArticle: Article) => {
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setArticles(prev => prev.map(article => article.id === editedArticle.id ? editedArticle : article))
-    setIsLoading(false)
-    setIsEditModalOpen(false)
-  }
+  const handleEdit = async (editedArticle: FormData, id: number) => {
+    setIsLoading(true);
+    try {
+      await axios.put(`${BASE_URL}/API/articles/${id}`, editedArticle);
+      const response = await axios.get(`${BASE_URL}/API/getProgramArticles`);
+      setArticles(response.data);
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error('Error updating article:', error);
+    }
+    setIsLoading(false);
+  };
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this article?')) {
-      setIsLoading(true)
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setArticles(prev => prev.filter(article => article.id !== id))
-      setIsLoading(false)
+      setIsLoading(true);
+      try {
+        await axios.delete(`${BASE_URL}/API/articles/${id}/delete`);
+        setArticles(prev => prev.filter(article => article.id !== id));
+      } catch (error) {
+        console.error('Error deleting article:', error);
+      }
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -122,26 +134,20 @@ export default function ManageArticles() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={filters.department} onValueChange={(value) => handleFilterChange('department', value)}>
+          <Select value={department} onValueChange={(value) => handleFilterChange('department', value)} disabled>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Department" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All  Departments</SelectItem>
-              {DEPARTMENT_CHOICES.map(department => (
-                <SelectItem key={department} value={department}>{department}</SelectItem>
-              ))}
+              <SelectItem value={department}>{department}</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={filters.program} onValueChange={(value) => handleFilterChange('program', value)}>
+          <Select value={program} onValueChange={(value) => handleFilterChange('program', value)} disabled>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Program" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Programs</SelectItem>
-              {PROGRAM_CHOICES.map(program => (
-                <SelectItem key={program} value={program}>{program}</SelectItem>
-              ))}
+              <SelectItem value={program}>{program}</SelectItem>
             </SelectContent>
           </Select>
           <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
@@ -152,7 +158,7 @@ export default function ManageArticles() {
               <DialogHeader>
                 <DialogTitle>Add New Article</DialogTitle>
               </DialogHeader>
-              <ArticleForm onSubmit={handleAdd} isLoading={isLoading} />
+              <ArticleForm onSubmit={handleAdd} isLoading={isLoading} users={users} />
             </DialogContent>
           </Dialog>
         </div>
@@ -189,7 +195,12 @@ export default function ManageArticles() {
                             <DialogTitle>Edit Article</DialogTitle>
                           </DialogHeader>
                           {currentArticle && (
-                            <ArticleForm onSubmit={handleEdit} initialData={currentArticle} isLoading={isLoading} />
+                            <ArticleForm 
+                              onSubmit={handleEdit} 
+                              initialData={currentArticle} 
+                              isLoading={isLoading} 
+                              users={users}
+                            />
                           )}
                         </DialogContent>
                       </Dialog>
